@@ -2,3 +2,7 @@ body{
     background-color: aqua;
     font-family: sans-serif;
 }
+
+.head{
+    font-weight: 200;
+}
