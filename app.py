@@ -1,12 +1,12 @@
-from flask import Flask
+from flask import Flask, render_template
 
 #make package object instance
 app=Flask(__name__)
 
 #define routes and app logic
-@app.route("/")
+@app.route("/", method=["GET", "POST"])
 def index():
-    return "Hey, welcome."
+    return render_template("index.html")
 
 @app.route("/predict")
 def predict():

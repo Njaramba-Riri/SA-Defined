@@ -7,7 +7,7 @@ app=Flask()
 
 
 app.config[MYSQL_HOST]='localhost'
-app.
+
 #define routes and app logic
 @app.route("/", method=["GET", "POST"])
 def index():
