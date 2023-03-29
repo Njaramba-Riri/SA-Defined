@@ -4,7 +4,7 @@ from flask import Flask, render_template
 app=Flask(__name__)
 
 #define routes and app logic
-@app.route("/", method=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def index():
     return render_template("index.html")
 
