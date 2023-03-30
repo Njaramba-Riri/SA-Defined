@@ -8,5 +8,10 @@
             <input type="submit" value="Send">
         </form>
     </center>
-    
+    {% for name in names %}
+        <a href="#">
+            <h2>{{ name['first_name'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ name['last_name'] }}</span>
+    {% endfor %}
 {% endblock %}
