@@ -34,7 +34,12 @@ def index():
 def predict():
     return"Data Scientist, is that you?"
 
-@app.route('/<int:name_id')
+@app.route('/<int:name_id>')
+def name(name_id):
+    name=get_name(name_id)
+    return render_template('names.html', name=name)
+
+
 
 if __name__=="__main__":
     app.run(debug=True, Host="0.0.0.0", port=3000)
