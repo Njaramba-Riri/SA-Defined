@@ -4,7 +4,7 @@ from werkzeug.exceptions import abort
 
 #make package object instance
 app=Flask(__name__)
-
+app.config['SECRET_KEY']='githambutha'
 
 #connecting to db
 def get_db_conn():
@@ -30,6 +30,11 @@ def index():
     conn.close()
     return render_template("index.html", names=names)
 
+
+@app.route('/create', methods=('GET','POST'))
+def create():
+    return render_template('login.html')
+
 @app.route("/predict")
 def predict():
     return"Data Scientist, is that you?"
@@ -38,7 +43,6 @@ def predict():
 def name(name_id):
     name=get_name(name_id)
     return render_template('names.html', name=name)
-
 
 
 if __name__=="__main__":
