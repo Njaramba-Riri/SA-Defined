@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, flash, redirect, url_for
 import sqlite3
 from werkzeug.exceptions import abort
 
@@ -26,14 +26,26 @@ def get_name(name_id):
 @app.route("/", methods=["GET", "POST"])
 def index():
     conn=get_db_conn()
-    names=conn.execute('SELECT * FROM users').fetchall()
+    posts=conn.execute('SELECT * FROM users').fetchall()
     conn.close()
-    return render_template("index.html", names=names)
+    return render_template("index.html", names=posts)
 
 
 @app.route('/create', methods=('GET','POST'))
 def create():
-    return render_template('login.html')
+    if request.method == 'POST':
+        title= request.form['title']
+        content=request.form['content']
+
+        if not title:
+            flash('Title is required!')
+        else:
+            conn=get_db_conn()
+            conn.execute('INSERT INTO users (title, content) VALUES(?,?)', (title, content))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('index'))
+    return render_template('create.html')
 
 @app.route("/predict")
 def predict():
@@ -46,7 +58,7 @@ def name(name_id):
 
 
 if __name__=="__main__":
-    app.run(debug=True, Host="0.0.0.0", port=3000)
+    app.run(debug=True, host="0.0.0.0", port=3000)
 
  
 
