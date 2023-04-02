@@ -13,14 +13,13 @@ def get_db_conn():
     return conn
 
 #displaying a single name
-def get_name(name_id):
+def get_post(post_id):
     conn=get_db_conn()
-    name=conn.execute('SELECT * FROM users WHERE id=?', (name_id)).fetchone()
+    post=conn.execute('SELECT * FROM users WHERE id=?', (post_id)).fetchone()
     conn.close()
-    if name is None:
+    if post is None:
         abort(404)
-    return name
-
+    return post
 
 #define routes and app logic
 @app.route("/", methods=["GET", "POST"])
@@ -51,10 +50,41 @@ def create():
 def predict():
     return"Data Scientist, is that you?"
 
-@app.route('/<int:name_id>')
-def name(name_id):
-    name=get_name(name_id)
-    return render_template('names.html', name=name)
+@app.route('/<int:post_id>')
+def post(post_id):
+    post=get_post(post_id)
+    return render_template('edit.html', name=post)
+
+@app.route('/<int:id>/edit', methods=('GET','POST'))
+def edit(id):
+    post=get_post(id)
+
+    if request.method=='POST':
+        title=request.form['title']
+        content=request.form['content']
+
+        if not title:
+            flash("Title is required")
+        else:
+            conn=get_db_conn()
+            conn.execute('UPDATE users SET title= ?, content= ?' 'WHERE id= ?', (title, content, id))
+
+            conn.commit()
+            conn.close()
+            return redirect(url_for('index'))
+        
+    return render_template('edit.html', post=post)
+
+#deleting the post
+@app.route('/<int:id>/delete', methods=('POST',))
+def delete(id):
+    post=get_post(id)
+    conn=get_db_conn()
+    conn.execute('DELETE FROM posts WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    flash('"{}" was successfully deleted!'.format(post['title']))
+    return redirect(url_for('index'))
 
 
 if __name__=="__main__":
