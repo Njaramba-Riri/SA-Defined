@@ -13,9 +13,9 @@ def get_db_conn():
     return conn
 
 #displaying a single name
-def get_post(post_id):
+def get_post(id):
     conn=get_db_conn()
-    post=conn.execute('SELECT * FROM users WHERE id=?', (post_id)).fetchone()
+    post=conn.execute('SELECT * FROM users WHERE id=?', (id,)).fetchone()
     conn.close()
     if post is None:
         abort(404)
@@ -27,7 +27,7 @@ def index():
     conn=get_db_conn()
     posts=conn.execute('SELECT * FROM users').fetchall()
     conn.close()
-    return render_template("index.html", names=posts)
+    return render_template("index.html", name=posts)
 
 
 @app.route('/create', methods=('GET','POST'))
