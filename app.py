@@ -4,7 +4,7 @@ from werkzeug.exceptions import abort
 
 #make package object instance
 app=Flask(__name__)
-app.config['SECRET_KEY']='githambutha'
+
 
 #connecting to db
 def get_db_conn():
@@ -20,6 +20,8 @@ def get_post(id):
     if post is None:
         abort(404)
     return post
+
+app.config['SECRET_KEY']='githambutha'
 
 #define routes and app logic
 @app.route("/", methods=["GET", "POST"])
@@ -63,7 +65,7 @@ def edit(id):
             flash("Title is required")
         else:
             conn=get_db_conn()
-            conn.execute('UPDATE users SET title= ?, content= ?WHERE id= ?', (title, content, id))
+            conn.execute('UPDATE users SET title= ?, content= ?' 'WHERE id= ?', (title, content, id))
 
             conn.commit()
             conn.close()
