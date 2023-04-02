@@ -27,7 +27,7 @@ def index():
     conn=get_db_conn()
     posts=conn.execute('SELECT * FROM users').fetchall()
     conn.close()
-    return render_template("index.html", name=posts)
+    return render_template("index.html", posts=posts)
 
 
 @app.route('/create', methods=('GET','POST'))
@@ -46,14 +46,10 @@ def create():
             return redirect(url_for('index'))
     return render_template('create.html')
 
-@app.route("/predict")
-def predict():
-    return"Data Scientist, is that you?"
-
 @app.route('/<int:post_id>')
 def post(post_id):
     post=get_post(post_id)
-    return render_template('edit.html', name=post)
+    return render_template('posts.html', post=post)
 
 @app.route('/<int:id>/edit', methods=('GET','POST'))
 def edit(id):
@@ -67,7 +63,7 @@ def edit(id):
             flash("Title is required")
         else:
             conn=get_db_conn()
-            conn.execute('UPDATE users SET title= ?, content= ?' 'WHERE id= ?', (title, content, id))
+            conn.execute('UPDATE users SET title= ?, content= ?WHERE id= ?', (title, content, id))
 
             conn.commit()
             conn.close()
@@ -80,7 +76,7 @@ def edit(id):
 def delete(id):
     post=get_post(id)
     conn=get_db_conn()
-    conn.execute('DELETE FROM posts WHERE id = ?', (id,))
+    conn.execute('DELETE FROM users WHERE id = ?', (id,))
     conn.commit()
     conn.close()
     flash('"{}" was successfully deleted!'.format(post['title']))
